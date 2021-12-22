@@ -7,7 +7,7 @@
 #
 # CREATED:          12/03/2021
 #
-# LAST EDITED:      12/11/2021
+# LAST EDITED:      12/21/2021
 #
 # Copyright 2021, Ethan D. Twardy
 #
@@ -43,17 +43,17 @@ add_global_arguments('-frecord-gcc-switches', language: 'c')
 
 gobiargp_gen_sources = files([
   'source/main.c',
-  'source/gobiargp.c',
+  # 'source/gobiargp.c',
   'source/configuration.c',
 ])
 
-libyaml = dependency('yaml-0.1')
+libgobiserde = dependency('libgobiserde')
 
 executable(
   'gobiargp-gen',
   sources: gobiargp_gen_sources,
   include_directories: 'source',
-  dependencies: [libyaml],
+  dependencies: [libgobiserde],
 )
 
 ###############################################################################

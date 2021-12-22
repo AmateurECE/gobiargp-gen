@@ -7,7 +7,7 @@
 //
 // CREATED:         12/03/2021
 //
-// LAST EDITED:     12/03/2021
+// LAST EDITED:     12/21/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -32,12 +32,13 @@
 
 #include <stdio.h>
 
-#include <gobiargp.h>
+#include "configuration.h"
 
-int main(int argc, char** argv) {
-    GobiProgramArguments* arguments = gobiargp_parse_args(argc, argv);
-    int test_args = gobiargp_get_argument_int(arguments, "test", 0);
-    gobiargp_args_free(&arguments);
+int main() {
+    ArgpConfig* config = gobiargp_load_configuration("test.yaml");
+    printf("name=%s,version=%s,author=\"%s\"\n", config->name, config->version,
+           config->author);
+    printf("About:\n%s\n", config->about);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
