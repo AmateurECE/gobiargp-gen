@@ -7,7 +7,7 @@
 //
 // CREATED:         12/21/2021
 //
-// LAST EDITED:     12/21/2021
+// LAST EDITED:     12/22/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -33,11 +33,28 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
+#include <stdbool.h>
+
+// Forward decl for GHashTable (opaque struct, part of glib).
+typedef struct _GHashTable GHashTable;
+
+typedef struct ArgpArgument {
+    char* long_name;
+    char short_name;
+    bool takes_value;
+    char* value_name;
+    char* help;
+    bool required;
+    int index;
+    bool multiple;
+} ArgpArgument;
+
 typedef struct ArgpConfig {
     char* name;
     char* version;
     char* author;
     char* about;
+    GHashTable* args;
 } ArgpConfig;
 
 // Load the configuration from the YAML file at the path <filename>

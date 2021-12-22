@@ -7,7 +7,7 @@
 //
 // CREATED:         12/03/2021
 //
-// LAST EDITED:     12/21/2021
+// LAST EDITED:     12/22/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -32,13 +32,32 @@
 
 #include <stdio.h>
 
+#include <glib-2.0/glib.h>
+
 #include "configuration.h"
 
 int main() {
     ArgpConfig* config = gobiargp_load_configuration("test.yaml");
-    printf("name=%s,version=%s,author=\"%s\"\n", config->name, config->version,
-           config->author);
-    printf("About:\n%s\n", config->about);
+    printf("name=%s,version=%s\nAuthor: %s\nAbout: %s\n", config->name,
+        config->version, config->author, config->about);
+
+    GHashTableIter iterator;
+    g_hash_table_iter_init(&iterator, config->args);
+    ArgpArgument* element = NULL;
+    const char* key = NULL;
+    printf("Args:\n");
+    while (g_hash_table_iter_next(&iterator, (void**)&key, (void**)&element)) {
+        printf("    %s=%p\n", key, (void*)element);
+        printf("        long_name=%s\n", element->long_name);
+        printf("        short_name=%c\n", element->short_name);
+        printf("        takes_value=%s\n",
+            element->takes_value ? "true" : "false");
+        printf("        value_name=%s\n", element->value_name);
+        printf("        help=%s\n", element->help);
+        printf("        required=%s\n", element->required ? "true" : "false");
+        printf("        index=%d\n", element->index);
+        printf("        multiple=%s\n", element->multiple ? "true" : "false");
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

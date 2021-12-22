@@ -7,7 +7,7 @@
 #
 # CREATED:          12/03/2021
 #
-# LAST EDITED:      12/21/2021
+# LAST EDITED:      12/22/2021
 #
 # Copyright 2021, Ethan D. Twardy
 #
@@ -48,12 +48,13 @@ gobiargp_gen_sources = files([
 ])
 
 libgobiserde = dependency('libgobiserde')
+libglib = dependency('glib-2.0')
 
 executable(
   'gobiargp-gen',
   sources: gobiargp_gen_sources,
   include_directories: 'source',
-  dependencies: [libgobiserde],
+  dependencies: [libgobiserde, libglib],
 )
 
 ###############################################################################
