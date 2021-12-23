@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parser>
-  <node id="comment">
+  <chunk id="comment">
     // This is a comment
-  </node>
+  </chunk>
 </parser>

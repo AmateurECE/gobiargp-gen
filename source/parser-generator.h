@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            config.h
+// NAME:            parser-generator.h
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     Build-time configuration template file.
+// DESCRIPTION:     Interface for the parser generator.
 //
-// CREATED:         12/22/2021
+// CREATED:         12/23/2021
 //
 // LAST EDITED:     12/23/2021
 //
@@ -30,7 +30,16 @@
 // IN THE SOFTWARE.
 ////
 
-#define CONFIG_VERSION "@version@"
-#define CONFIG_PARSER_CHUNK_FILE ""
+#ifndef PARSER_GENERATOR_H
+#define PARSER_GENERATOR_H
+
+#include <stdlib.h>
+
+typedef struct _xmlDoc xmlDoc;
+
+void generate_argument_parser(xmlDoc* document, FILE* output_source,
+    FILE* output_header);
+
+#endif // PARSER_GENERATOR_H
 
 ///////////////////////////////////////////////////////////////////////////////

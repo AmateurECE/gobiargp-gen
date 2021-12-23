@@ -7,7 +7,7 @@
 #
 # CREATED:          12/03/2021
 #
-# LAST EDITED:      12/22/2021
+# LAST EDITED:      12/23/2021
 #
 # Copyright 2021, Ethan D. Twardy
 #
@@ -45,6 +45,7 @@ gobiargp_gen_sources = files([
   'source/main.c',
   'source/argparse.c',
   'source/configuration.c',
+  'source/parser-generator.c',
 ])
 
 libgobiserde = dependency('libgobiserde')
