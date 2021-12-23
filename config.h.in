@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            main.c
+// NAME:            config.h
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     Entrypoint for the application
+// DESCRIPTION:     Build-time configuration template file.
 //
-// CREATED:         12/03/2021
+// CREATED:         12/22/2021
 //
 // LAST EDITED:     12/22/2021
 //
@@ -30,22 +30,6 @@
 // IN THE SOFTWARE.
 ////
 
-#include <stdio.h>
-
-#include <glib-2.0/glib.h>
-
-#include "configuration.h"
-#include "argparse.h"
-
-int main(int argc, char** argv) {
-    ArgpArguments arguments = {
-        .output_basename="argparse",
-        .input_file="gobiargp-config.yaml",
-    };
-    gobi_argp_parse_args(&arguments, argc, argv);
-    /* ArgpConfig* config = gobiargp_load_configuration("test.yaml"); */
-    printf("output_basename=%s,input_file=%s\n", arguments.output_basename,
-        arguments.input_file);
-}
+#define CONFIG_VERSION "@version@"
 
 ///////////////////////////////////////////////////////////////////////////////

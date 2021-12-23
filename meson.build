@@ -43,18 +43,25 @@ add_global_arguments('-frecord-gcc-switches', language: 'c')
 
 gobiargp_gen_sources = files([
   'source/main.c',
-  # 'source/gobiargp.c',
+  'source/argparse.c',
   'source/configuration.c',
 ])
 
 libgobiserde = dependency('libgobiserde')
 libglib = dependency('glib-2.0')
+libxml2 = dependency('libxml-2.0')
 
 executable(
   'gobiargp-gen',
   sources: gobiargp_gen_sources,
   include_directories: 'source',
-  dependencies: [libgobiserde, libglib],
+  dependencies: [libgobiserde, libglib, libxml2],
 )
+
+config_data = configuration_data({
+  'version': meson.project_version(),
+})
+configure_file(input: 'config.h.in', output: 'config.h',
+               configuration: config_data)
 
 ###############################################################################

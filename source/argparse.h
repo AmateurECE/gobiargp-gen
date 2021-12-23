@@ -1,13 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            gobiargp.h
+// NAME:            argparse.h
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     Parser declarations
+// DESCRIPTION:     Logic for parsing command line arguments...have to start
+//                  somewhere.
 //
-// CREATED:         12/03/2021
+// CREATED:         12/22/2021
 //
-// LAST EDITED:     12/03/2021
+// LAST EDITED:     12/22/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -30,30 +31,17 @@
 // IN THE SOFTWARE.
 ////
 
-#ifndef GOBIARGP_H
-#define GOBIARGP_H
+#ifndef ARGPARSE_H
+#define ARGPARSE_H
 
-// Structure holding the parsed program arguments. Query this container using
-// the functions available below to get configuration passed to the program.
-typedef struct GobiProgramArguments {
-    int unused;
-} GobiProgramArguments;
+typedef struct ArgpArguments {
+    char* output_basename;
+    char* input_file;
+} ArgpArguments;
 
-// Parse arguments passed to main, allocating a GobiProgramArguments object
-// using malloc(3).
-GobiProgramArguments* gobiargp_parse_args(int argc, char** argv);
+// Parse command line arguments
+void gobi_argp_parse_args(ArgpArguments* arguments, int argc, char** argv);
 
-// Free a GobiProgramArguments object and all internally allocated memory. The
-// pointer-to-pointer here allows internal logic to prevent accidental
-// double-freeing
-void gobiargp_args_free(GobiProgramArguments** args);
-
-// Attempt to obtain the value of the argument with name <argument_name> as an
-// integer. If no argument matching the name was provided, return
-// <default_value>.
-int gobiargp_get_argument_int(GobiProgramArguments* arguments,
-    const char* argument_name, int default_value);
-
-#endif // GOBIARGP_H
+#endif // ARGPARSE_H
 
 ///////////////////////////////////////////////////////////////////////////////
