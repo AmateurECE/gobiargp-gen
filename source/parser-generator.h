@@ -35,8 +35,18 @@
 
 #include <stdlib.h>
 
-void generate_argparse_header(FILE* output_header);
-void generate_argparse_source(FILE* output_source);
+typedef struct ParserGenerator ParserGenerator;
+
+typedef struct ParserContext {
+    const char* filename;
+} ParserContext;
+
+ParserGenerator* parser_generator_new();
+void parser_generator_free(ParserGenerator** parser);
+void parser_generator_write_header(ParserGenerator* parser,
+    ParserContext* context, FILE* output);
+void parser_generator_write_source(ParserGenerator* parser,
+    ParserContext* context, FILE* output);
 
 #endif // PARSER_GENERATOR_H
 

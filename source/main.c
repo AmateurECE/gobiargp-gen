@@ -90,9 +90,22 @@ int main(int argc, char** argv) {
         goto error_open_header;
     }
 
-    generate_argparse_header(output_header_file);
-    generate_argparse_source(output_source_file);
+    ParserGenerator* parser = parser_generator_new();
 
+    ParserContext header_context = {
+        .filename = output_header,
+    };
+
+    parser_generator_write_header(parser, &header_context, output_header_file);
+
+    ParserContext source_context = {
+        .filename = output_source,
+    };
+
+    parser_generator_write_source(parser, &source_context, output_source_file);
+    parser_generator_free(&parser);
+
+    fclose(output_header_file);
  error_open_header:
     fclose(output_source_file);
  error_open_source:

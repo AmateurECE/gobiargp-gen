@@ -31,6 +31,11 @@
 ////
 
 #include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <time.h>
+
+#include <handlebars.h>
 
 #include "parser-generator.h"
 
@@ -41,17 +46,82 @@ extern const char priv_functions[];
 extern const char priv_parse_flag_arg[];
 extern const char parse_args_entrypoint[];
 
+typedef struct ParserGenerator {
+    Handlebars* file_banner;
+    Handlebars* program_usage;
+} ParserGenerator;
+
+///////////////////////////////////////////////////////////////////////////////
+// Private API
+////
+
+void priv_write_banner(Handlebars* file_banner, ParserContext* context,
+    FILE* output)
+{
+    HbTemplateContext* file_banner_input = handlebars_template_context_init();
+    handlebars_template_context_set_string(file_banner_input, "filename",
+        context->filename);
+
+    time_t current_time = time(NULL);
+    struct tm* date = gmtime(&current_time);
+    char date_string[11] = {0};
+    snprintf(date_string, sizeof(date_string), "%d/%d/%d", date->tm_mon + 1,
+        date->tm_mday, date->tm_year + 1900);
+    handlebars_template_context_set_string(file_banner_input, "date",
+        date_string);
+    HbString* file_banner_content = handlebars_template_render(
+        file_banner, file_banner_input);
+    handlebars_template_context_free(&file_banner_input);
+    fprintf(output, file_banner_content->string);
+    hb_string_free(&file_banner_content);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 ////
 
-void generate_argparse_header(FILE* output_header) {
-    fprintf(output_header, file_banner);
+ParserGenerator* parser_generator_new() {
+    ParserGenerator* parser = malloc(sizeof(ParserGenerator));
+    if (NULL == parser) {
+        return NULL;
+    }
+
+    memset(parser, 0, sizeof(ParserGenerator));
+
+    static const char* const blobs[] = {file_banner, program_usage, NULL};
+    Handlebars** templates[] = {&parser->file_banner, &parser->program_usage,
+        NULL};
+    ssize_t index = -1;
+    while (NULL != blobs[++index]) {
+        HbInputContext* input = handlebars_input_context_from_string(
+            blobs[index]);
+        *templates[index] = handlebars_template_load(input);
+        handlebars_input_context_free(&input);
+    }
+    return parser;
 }
 
-void generate_argparse_source(FILE* output_source) {
-    fprintf(output_source, file_banner);
-    fprintf(output_source, program_usage);
+void parser_generator_free(ParserGenerator** parser) {
+    if (NULL == *parser) {
+        return;
+    }
+
+    handlebars_template_free(&(*parser)->file_banner);
+    handlebars_template_free(&(*parser)->program_usage);
+    free(*parser);
+    *parser = NULL;
+}
+
+void parser_generator_write_header(ParserGenerator* parser,
+    ParserContext* context, FILE* output_header)
+{
+    priv_write_banner(parser->file_banner, context, output_header);
+}
+
+void parser_generator_write_source(ParserGenerator* parser,
+    ParserContext* context, FILE* output_source)
+{
+    priv_write_banner(parser->file_banner, context, output_source);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -57,12 +57,13 @@ gobiargp_gen_sources = files([
 
 libgobiserde = dependency('libgobiserde')
 libglib = dependency('glib-2.0')
+libhandlebars = dependency('libhandlebars')
 
 executable(
   'gobiargp-gen',
   sources: [gobiargp_gen_sources, frozen_blobs],
   include_directories: 'source',
-  dependencies: [libgobiserde, libglib],
+  dependencies: [libgobiserde, libglib, libhandlebars],
 )
 
 config_data = configuration_data({
