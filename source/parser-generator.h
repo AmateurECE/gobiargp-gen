@@ -7,7 +7,7 @@
 //
 // CREATED:         12/23/2021
 //
-// LAST EDITED:     12/23/2021
+// LAST EDITED:     12/24/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -35,9 +35,12 @@
 
 #include <stdlib.h>
 
-typedef struct _xmlDoc xmlDoc;
+typedef struct TemplateChunks {
+    const char* comment;
+    const char* second;
+} TemplateChunks;
 
-void generate_argument_parser(xmlDoc* document, FILE* output_source,
+void generate_argument_parser(TemplateChunks* templates, FILE* output_source,
     FILE* output_header);
 
 #endif // PARSER_GENERATOR_H

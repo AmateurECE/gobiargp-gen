@@ -7,7 +7,7 @@
 //
 // CREATED:         12/03/2021
 //
-// LAST EDITED:     12/23/2021
+// LAST EDITED:     12/24/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -36,20 +36,17 @@
 #include <string.h>
 
 #include <glib-2.0/glib.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
 
 #include "config.h"
 #include "configuration.h"
 #include "argparse.h"
 #include "parser-generator.h"
 
-static const char* DEFAULT_PARSER_CHUNK_FILE = CONFIG_PARSER_CHUNK_FILE;
+// Forward declarations from generated frozen chunks.
+extern const char comment[];
+extern const char second[];
 
 int main(int argc, char** argv) {
-    xmlInitParser();
-    LIBXML_TEST_VERSION;
-
     int result = 0;
     ArgpArguments arguments = {
         .output_basename="argparse",
@@ -81,20 +78,6 @@ int main(int argc, char** argv) {
     strcpy(output_header, arguments.output_basename);
     strcat(output_header, ".h");
 
-    // Allow the user to override the path used for the parser chunk file
-    // (used in development).
-    const char* parser_chunk_file = getenv("PARSER_CHUNK_FILE");
-    if (NULL == parser_chunk_file) {
-        parser_chunk_file = DEFAULT_PARSER_CHUNK_FILE;
-    }
-
-    xmlDoc* document = xmlParseFile(parser_chunk_file);
-    if (NULL == document) {
-        fprintf(stderr, "Couldn't load file: '%s'\n", parser_chunk_file);
-        result = __LINE__;
-        goto error_read_xml;
-    }
-
     FILE* output_source_file = fopen(output_source, "w");
     if (NULL == output_source_file) {
         fprintf(stderr, "Couldn't open source file for writing: %s\n",
@@ -111,20 +94,22 @@ int main(int argc, char** argv) {
         goto error_open_header;
     }
 
-    generate_argument_parser(document, output_source_file,
+    TemplateChunks templates = {
+        .comment = comment,
+        .second = second,
+    };
+
+    generate_argument_parser(&templates, output_source_file,
         output_header_file);
 
  error_open_header:
     fclose(output_source_file);
  error_open_source:
-    xmlFreeDoc(document);
- error_read_xml:
     free(output_source);
  error_malloc_source:
     free(output_header);
  error_malloc_header:
     gobiargp_free_configuration(&config);
-    xmlCleanupParser();
     return result;
 }
 

@@ -7,7 +7,7 @@
 #
 # CREATED:          12/03/2021
 #
-# LAST EDITED:      12/23/2021
+# LAST EDITED:      12/24/2021
 #
 # Copyright 2021, Ethan D. Twardy
 #
@@ -41,6 +41,13 @@ project(
 
 add_global_arguments('-frecord-gcc-switches', language: 'c')
 
+frozen_blobs = custom_target(
+  'frozen-blobs.c',
+  output: 'frozen-blobs.c',
+  input: 'source/parser-chunks.c',
+  command: ['python3', '../build-chunks.py', '@INPUT@', '@OUTPUT@']
+)
+
 gobiargp_gen_sources = files([
   'source/main.c',
   'source/argparse.c',
@@ -50,13 +57,12 @@ gobiargp_gen_sources = files([
 
 libgobiserde = dependency('libgobiserde')
 libglib = dependency('glib-2.0')
-libxml2 = dependency('libxml-2.0')
 
 executable(
   'gobiargp-gen',
-  sources: gobiargp_gen_sources,
+  sources: [gobiargp_gen_sources, frozen_blobs],
   include_directories: 'source',
-  dependencies: [libgobiserde, libglib, libxml2],
+  dependencies: [libgobiserde, libglib],
 )
 
 config_data = configuration_data({
