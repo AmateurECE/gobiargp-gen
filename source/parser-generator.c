@@ -34,15 +34,24 @@
 
 #include "parser-generator.h"
 
+// Forward declarations from generated frozen chunks.
+extern const char file_banner[];
+extern const char program_usage[];
+extern const char priv_functions[];
+extern const char priv_parse_flag_arg[];
+extern const char parse_args_entrypoint[];
+
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 ////
 
-void generate_argument_parser(TemplateChunks* templates, FILE* output_source,
-    FILE* output_header)
-{
-    fprintf(output_source, templates->comment);
-    fprintf(output_header, templates->comment);
+void generate_argparse_header(FILE* output_header) {
+    fprintf(output_header, file_banner);
+}
+
+void generate_argparse_source(FILE* output_source) {
+    fprintf(output_source, file_banner);
+    fprintf(output_source, program_usage);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

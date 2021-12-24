@@ -35,13 +35,8 @@
 
 #include <stdlib.h>
 
-typedef struct TemplateChunks {
-    const char* comment;
-    const char* second;
-} TemplateChunks;
-
-void generate_argument_parser(TemplateChunks* templates, FILE* output_source,
-    FILE* output_header);
+void generate_argparse_header(FILE* output_header);
+void generate_argparse_source(FILE* output_source);
 
 #endif // PARSER_GENERATOR_H
 

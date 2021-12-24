@@ -42,10 +42,6 @@
 #include "argparse.h"
 #include "parser-generator.h"
 
-// Forward declarations from generated frozen chunks.
-extern const char comment[];
-extern const char second[];
-
 int main(int argc, char** argv) {
     int result = 0;
     ArgpArguments arguments = {
@@ -94,13 +90,8 @@ int main(int argc, char** argv) {
         goto error_open_header;
     }
 
-    TemplateChunks templates = {
-        .comment = comment,
-        .second = second,
-    };
-
-    generate_argument_parser(&templates, output_source_file,
-        output_header_file);
+    generate_argparse_header(output_header_file);
+    generate_argparse_source(output_source_file);
 
  error_open_header:
     fclose(output_source_file);
