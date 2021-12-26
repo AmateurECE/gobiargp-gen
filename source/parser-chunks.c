@@ -30,25 +30,6 @@
 ////
 //! file_banner
 
-static const char* PROGRAM_USAGE = "\
-gobiargp-gen {{version}}\n\
-Copyright (c) 2021 {{author}}. All rights reserved.\n\
-This program is free software.\n\
-{{description}}\
-\n\
-usage: gobiargp-gen [options]\n\
-\n\
-Options:\n\
-    -f,--file[ =]<file>: The YAML input file to the program. This file has a\n\
-        format very similar to the YAML schema accepted by clap. See either\n\
-        the manpage for this program, gobiargp-gen(1), or the docs for \n\
-        clap.rs (https://docs.rs/clap/) to get a better understanding.\n\
-    -o,--output[ =]<output>: The filename stem to use when creating output\n\
-        files. For example, with -o dir/test, the program creates test.h and\n\
-        test.c in the directory ./dir.\n\
-";
-//! program_usage
-
 static _Noreturn inline void priv_takes_arg(char* bad_argument) {
     fprintf(stderr, "Argument '%s' takes a value. See --help.\n",
         bad_argument);
@@ -65,7 +46,6 @@ static _Noreturn inline void priv_usage() {
     fprintf(stderr, PROGRAM_USAGE);
     exit(1);
 }
-//! priv_functions
 
 // Parse a single flag argument. This function accepts flags that take a value,
 // which can be of the form (e.g. for a flag '-f') "-f=value", "-f value". If
@@ -87,7 +67,7 @@ static void priv_parse_flag_arg(char** output, int* index, int argc,
     *index += 1;
     *output = argv[*index];
 }
-//! priv_parse_flag_arg
+//! priv_functions
 
 // Parse command line arguments. Some advantages of this parser:
 //  * This program currently has no positional arguments, which means we can

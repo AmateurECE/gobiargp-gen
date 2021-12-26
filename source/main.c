@@ -7,7 +7,7 @@
 //
 // CREATED:         12/03/2021
 //
-// LAST EDITED:     12/24/2021
+// LAST EDITED:     12/25/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -100,6 +100,7 @@ int main(int argc, char** argv) {
 
     ParserContext source_context = {
         .filename = output_source,
+        .config = config,
     };
 
     parser_generator_write_source(parser, &source_context, output_source_file);

@@ -7,7 +7,7 @@
 //
 // CREATED:         12/23/2021
 //
-// LAST EDITED:     12/24/2021
+// LAST EDITED:     12/25/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -38,17 +38,25 @@
 #include <handlebars.h>
 
 #include "parser-generator.h"
+#include "configuration.h"
 
 // Forward declarations from generated frozen chunks.
 extern const char file_banner[];
-extern const char program_usage[];
 extern const char priv_functions[];
 extern const char priv_parse_flag_arg[];
 extern const char parse_args_entrypoint[];
 
+static const char* PROGRAM_USAGE_TEMPLATE = "\
+static const char* PROGRAM_USAGE = \"\\\n\
+%s %s\\n\\\n\
+%s\\n\\\n\
+%s\\n\\\n\
+\\n\\\n\
+\";\n\
+";
+
 typedef struct ParserGenerator {
     Handlebars* file_banner;
-    Handlebars* program_usage;
 } ParserGenerator;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,6 +84,13 @@ void priv_write_banner(Handlebars* file_banner, ParserContext* context,
     hb_string_free(&file_banner_content);
 }
 
+void priv_write_program_usage(ParserContext* context, FILE* output) {
+    fprintf(output, PROGRAM_USAGE_TEMPLATE,
+        context->config->name, context->config->version,
+        context->config->author,
+        context->config->about);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 ////
@@ -88,9 +103,8 @@ ParserGenerator* parser_generator_new() {
 
     memset(parser, 0, sizeof(ParserGenerator));
 
-    static const char* const blobs[] = {file_banner, program_usage, NULL};
-    Handlebars** templates[] = {&parser->file_banner, &parser->program_usage,
-        NULL};
+    static const char* const blobs[] = {file_banner, NULL};
+    Handlebars** templates[] = {&parser->file_banner, NULL};
     ssize_t index = -1;
     while (NULL != blobs[++index]) {
         HbInputContext* input = handlebars_input_context_from_string(
@@ -107,7 +121,6 @@ void parser_generator_free(ParserGenerator** parser) {
     }
 
     handlebars_template_free(&(*parser)->file_banner);
-    handlebars_template_free(&(*parser)->program_usage);
     free(*parser);
     *parser = NULL;
 }
@@ -122,6 +135,9 @@ void parser_generator_write_source(ParserGenerator* parser,
     ParserContext* context, FILE* output_source)
 {
     priv_write_banner(parser->file_banner, context, output_source);
+    fprintf(output_source, "\n");
+    priv_write_program_usage(context, output_source);
+    fprintf(output_source, "%s\n", priv_functions);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

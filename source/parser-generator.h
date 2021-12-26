@@ -7,7 +7,7 @@
 //
 // CREATED:         12/23/2021
 //
-// LAST EDITED:     12/24/2021
+// LAST EDITED:     12/25/2021
 //
 // Copyright 2021, Ethan D. Twardy
 //
@@ -36,9 +36,11 @@
 #include <stdlib.h>
 
 typedef struct ParserGenerator ParserGenerator;
+typedef struct ArgpConfig ArgpConfig;
 
 typedef struct ParserContext {
     const char* filename;
+    ArgpConfig* config;
 } ParserContext;
 
 ParserGenerator* parser_generator_new();
